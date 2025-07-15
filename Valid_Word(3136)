@@ -1,0 +1,28 @@
+class Solution {
+public:
+    bool isValid(string word) {
+        int n = word.length();
+        if(n<3) return false;
+
+        unordered_set<int> s1;
+        s1.insert('@'); s1.insert('#'); s1.insert('$');
+
+        unordered_set<char> s2;
+        s2.insert('a');s2.insert('A');s2.insert('e');s2.insert('E');s2.insert('i');s2.insert('I');s2.insert('O');
+        s2.insert('o');s2.insert('u'); s2.insert('U');
+
+        bool f1 = false;
+        bool f2 = false;
+
+        for(int i=0;i<n;i++){
+            if(s1.find(word[i])!=s1.end()) return false;
+            if(s2.find(word[i])!=s2.end()) f1 = true;
+            int num = (int)word[i];
+            if(s2.find(word[i])==s2.end()){
+                if(num >=65 && num <=122) f2 = true;
+            }
+        }
+        if(f1 && f2) return true;
+        else return false;
+    }
+};
