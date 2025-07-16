@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<pair<int,int>> dir = {{1,0}, {-1,0}, {0,1}, {0,-1}, {1,1}, {1,-1}, {-1,1}, {-1,-1}};
+    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+        
+        int n = grid.size();
+        if(grid[0][0]==1) return -1;
+        if(grid[n-1][n-1]==1) return -1;
+        vector<vector<int>> dist(n,vector<int> (n,INT_MAX));
+        dist[0][0] = 1;
+        queue<pair<int,int>> pq;
+        pq.push({0,0});
+        vector<vector<bool>> visited(n,vector<bool> (n,false));
+        visited[0][0] = true;
+        while(pq.size()>0){
+            auto curr = pq.front();
+            int i = curr.first;
+            int j = curr.second;
+            pq.pop();
+
+            for(int d=0;d<8;d++){
+                int row = i + dir[d].first;
+                int col = j + dir[d].second;
+
+                if(row<0 || col<0 || row>=n || col>=n || grid[row][col]==1) continue;
+                if(!visited[row][col]){
+                    dist[row][col] = dist[i][j] + 1;
+                    visited[row][col] = true;
+                    pq.push({row,col});
+                }
+                
+                
+            }
+        }
+        if(!visited[n-1][n-1]) return -1;
+        else return dist[n-1][n-1];
+    }
+};
