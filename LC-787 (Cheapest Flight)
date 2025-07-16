@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        vector<vector<pair<int,int>>> graph(n);
+        for(int i=0;i<flights.size();i++){
+            int u = flights[i][0];
+            int v = flights[i][1];
+            int wt = flights[i][2];
+            graph[u].push_back({v, wt});
+        }
+
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
+        pq.push({0, src, 0}); // {cost, node, steps}
+        vector<int> stops(n, INT_MAX);
+
+        while(!pq.empty()) {
+            auto curr = pq.top();
+            pq.pop();
+            int cost = curr[0], node = curr[1], steps = curr[2];
+
+            if(node == dst) return cost;
+            if(steps > k || steps >= stops[node]) continue;
+            stops[node] = steps;
+
+            for(int i=0; i<graph[node].size(); i++) {
+                int next = graph[node][i].first;
+                int wt = graph[node][i].second;
+                pq.push({cost + wt, next, steps + 1});
+            }
+        }
+
+        return -1;
+    }
+};
