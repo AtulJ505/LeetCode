@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+
+        vector<list<pair<int,int>>> graph(n+1);
+
+        for(int i=0;i<times.size();i++){
+            int u = times[i][0];
+            int v = times[i][1];
+            int d = times[i][2];
+
+            graph[u].push_back({v,d});
+        }
+        vector<int> ans(n+1,INT_MAX);
+        ans[k] = 0;
+        priority_queue<pair<int,int> , vector<pair<int,int>> , greater<pair<int,int>>> pq;
+        pq.push({0,k});
+        
+        while(pq.size()>0){
+            auto curr = pq.top();
+            int node = curr.second;
+            int val = curr.first;
+            pq.pop();
+
+            if(val>ans[node]) continue;
+
+            for(auto neighbor : graph[node]){
+                if(ans[neighbor.first]>neighbor.second+val){
+                    ans[neighbor.first] = neighbor.second+val;
+                    pq.push({ans[neighbor.first],neighbor.first});
+                }
+            }
+
+        }
+
+        int res = *max_element(ans.begin()+1,ans.end());
+        return (res==INT_MAX) ? -1 : res;
+    }
+};
